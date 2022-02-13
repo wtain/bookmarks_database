@@ -1,0 +1,1 @@
+docker run -p 27017:27017 -d --name=bookmarks_store mongo:latest --noauth --bind_ip=0.0.0.0
