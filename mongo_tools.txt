@@ -1,0 +1,1 @@
+mongoexport --collection=bookmarks mongodb://localhost:27017/bookmarks_store --out=bookmarks.json
