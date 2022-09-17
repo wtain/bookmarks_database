@@ -1,2 +1,42 @@
 mongoexport --collection=bookmarks mongodb://localhost:27017/bookmarks_store --out=bookmarks.json
 mongoimport --collection=bookmarks mongodb://localhost:27018/bookmarks_store bookmarks.json
+
+
+db.bookmarks.aggregate([
+    { "$addFields": {
+        "created": {
+            "$toDate": "$created"
+        }
+    } }
+])
+
+
+db.bookmarks.aggregate([
+    { "$addFields": {
+        "updated": {
+            "$toDate": "$updated"
+        }
+    } }
+])
+
+
+db.bookmarks.updateMany({}, [
+    {
+    	{ 
+    		$set: {
+    			"created" : {
+    				$toDate: "$created"
+    			}
+    		}
+    	}
+    }
+])
+
+
+
+db.bookmarks.updateMany({}, [{$set: {"created": {$toDate: "$created"}}}])
+
+db.bookmarks.updateMany({"updated": {"$exists": true}}, [{$set: {"updated": {$toDate: "$updated"}}}])
+
+
+db.bookmarks.remove({})
