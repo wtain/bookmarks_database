@@ -38,5 +38,37 @@ db.bookmarks.updateMany({}, [{$set: {"created": {$toDate: "$created"}}}])
 
 db.bookmarks.updateMany({"updated": {"$exists": true}}, [{$set: {"updated": {$toDate: "$updated"}}}])
 
+db.bookmarks.find({"updated": {$eq: NaN}})
 
+// Fails?
+db.bookmarks.updateMany({"updated": {$eq: NaN}}, [{$unset: {"updated": ""}}])
+
+db.bookmarks.updateMany({"updated": {$eq: NaN}}, [{$set: {"updated": new Date()}}])
+
+
+// Remove all
 db.bookmarks.remove({})
+
+
+
+db.bookmarks.aggregate([{
+    $group: {
+        _id: {
+            date: {
+                $dateTrunc: {
+                    date: "$created",
+                    unit: "day"
+                }
+            }
+        },
+        count: {
+            $sum: 1
+        }
+    }
+}])
+
+
+db.bookmarks.aggregate([{ $group: { _id: { date: { $dateTrunc: { date: "$created", unit: "day" } }}, count: { $count: {}}}}])
+
+
+db.bookmarks.aggregate([{ $match: {"created": {$gte: new Date("2022-09-01"), $lt: new Date("2022-10-01") } }},{ $group: { _id: { date: { $dateTrunc: { date: "$created", unit: "day" } }}, count: { $count: {}}}}])
