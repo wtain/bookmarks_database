@@ -72,3 +72,6 @@ db.bookmarks.aggregate([{ $group: { _id: { date: { $dateTrunc: { date: "$created
 
 
 db.bookmarks.aggregate([{ $match: {"created": {$gte: new Date("2022-09-01"), $lt: new Date("2022-10-01") } }},{ $group: { _id: { date: { $dateTrunc: { date: "$created", unit: "day" } }}, count: { $count: {}}}}])
+
+
+db.bookmarks.aggregate([{ $group: { _id: { date: { $dateTrunc: { date: "$created", unit: "day" } }}, count: { $count: {}}}},{$project: { "date": "$_id.date", "_id": 0, "count": 1 } }])
