@@ -51,3 +51,7 @@ db.bookmarks.aggregate([{$project: {comments: 0}}])
 
 // Bookmarks with comments count
 db.bookmarks.aggregate([{$addFields: {"comments_count": {$size: "$comments"}}}])
+
+
+// Remove comments field
+db.bookmarks.updateMany({}, { $unset: { comments: "" }})
